@@ -1,0 +1,79 @@
+## I would like to store information about the planets here.
+class CelestialBody(object):
+    'This is my first class, \
+it stores information about the Celestial Bodies in our solar system.'
+    
+    def __init__(self,mass,pos_x,pos_y,vel_x,vel_y):
+        self.m = mass
+        self.x = pos_x
+        self.y = pos_y
+        self.vx = vel_x
+        self.vy = vel_y
+        
+#Read The Documentation 
+#print(Planets.__doc__)
+        
+#Create Earth
+Earth = CelestialBody(1,1,0,1,0)
+Earth.m       
+
+'''
+-------------------------------
+Our Runge-Kutta Solver is here.
+-------------------------------
+'''
+def RK4(f,p_rk,v_rk):
+    global p_out,v_out
+    #Solve for the velocity
+    k1=h*f(p_rk)
+    k2=h*f(p_rk+k1/2)
+    k3=h*f(p_rk+k2/2)
+    k4=h*f(p_rk+k3)
+    v_out = v_rk+(k1+2*k2+2*k3+k4)/6
+    #Use velocity to solve for x at t=t+1
+    p_out=p_rk+h*v_out+(h**2/2)*f(p_rk)
+'''
+-------------------------------------
+A Function For Building the Vectors.
+-------------------------------------
+'''
+from array import *
+import math 
+import numpy as np
+
+def Vectorize(step_num,step_size,t_start):
+    global t_vec,x_vec,y_vec,v_x_vec,v_y_vec
+    t_vec=np.zeros(step_num)
+    x_vec=np.zeros(step_num)
+    y_vec=np.zeros(step_num)
+    v_x_vec=np.zeros(step_num)
+    v_y_vec=np.zeros(step_num)
+    i=1
+    while i<=step_num:
+        t_vec[i-1]=t_start+i*step_size
+        i=i+1
+
+<a id="cell3.1"></a>
+## 3.1 A More Realistic Model of The Earth-Sun System
+
+Using the classes and the function that I defined above I am now going to look at a better model for the earth-sun system.  If you need to, you can see the basic example of our system [here](#cell2.0).  I will rebuild a new version of the model.  This time I will now simple assume r to be a constant, but will calculate it explicitly as
+
+$$r=\sqrt{(x_{Earth}-x_{Sun})^2+(y_{Earth}-y_{Sun})^2}$$
+
+I will also no longer take the position of the sun as stationary.  This time the Sun will also move.  In astronomy, the presence of planets is often infered by the pull of the planets on their star.  Though the motion is small the star will wobble as it is tugged by the planet.  Hopefully we will see a similar effect here. 
+
+#Define time interval & step size
+#Starting at t=0
+t_0=0;t_f=10
+n=100
+h=(t_f-t_0)/n
+
+#Initialize Vectors
+Vectorize(n,h,t_0)
+#Define Constants
+GM_sun=(2*math.pi)**2;r=1
+GM_Earth=1
+
+# A Note For the Proffessor
+#
+# I was a little more frivolous when I was writing this project so the parts aren't necessarily done in the order (a,b,c...) in which they were presented.  Everything you asked for, and more, is in fact somewhere in this document.  If you have trouble finding anything do not hesitate to ask me.
